@@ -1,0 +1,7 @@
+{
+  "appId": "il.kesefsheli.app",
+  "appName": "הכסף שלי",
+  "webDir": "www",
+  "backgroundColor": "#111111",
+  "android": { "allowMixedContent": false, "webContentsDebuggingEnabled": false }
+}
