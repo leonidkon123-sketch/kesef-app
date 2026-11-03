@@ -2,10 +2,12 @@
   "name": "kesef-app",
   "private": true,
   "version": "1.0.0",
-  "description": "הכסף שלי — ניהול כסף אישי (PWA + Android)",
+  "description": "\u05d4\u05db\u05e1\u05e3 \u05e9\u05dc\u05d9 \u2014 \u05e0\u05d9\u05d4\u05d5\u05dc \u05db\u05e1\u05e3 \u05d0\u05d9\u05e9\u05d9 (PWA + Android)",
   "dependencies": {
     "@capacitor/android": "^7.0.0",
     "@capacitor/cli": "^7.0.0",
-    "@capacitor/core": "^7.0.0"
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/filesystem": "^7.0.0",
+    "@capacitor/share": "^7.0.0"
   }
 }
