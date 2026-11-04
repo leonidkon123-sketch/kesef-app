@@ -3,5 +3,16 @@
   "appName": "הכסף שלי",
   "webDir": "www",
   "backgroundColor": "#111111",
-  "android": { "allowMixedContent": false, "webContentsDebuggingEnabled": false }
+  "android": {
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false,
+    "adjustMarginsForEdgeToEdge": "force"
+  },
+  "plugins": {
+    "StatusBar": {
+      "overlaysWebView": false,
+      "backgroundColor": "#111111",
+      "style": "DARK"
+    }
+  }
 }

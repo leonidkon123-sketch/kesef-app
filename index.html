@@ -2,7 +2,7 @@
 <html lang="he" dir="rtl">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>הכסף שלי</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Rubik:wght@400;500;700;800;900&display=swap">
 <style id="app-style">
@@ -178,8 +178,11 @@ footer{margin-top:44px;border-top:1px solid var(--line);padding-top:22px}
 .hrow .d{font-size:12.5px;color:var(--muted);margin-top:6px}
 .eyebrow{color:var(--brand);font-size:12px;font-weight:800;letter-spacing:2px;margin-bottom:6px}
 /* overlays */
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:20;display:grid;place-items:center;padding:16px}
-.modal{background:#161616;border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:26px;width:min(680px,100%);max-height:90vh;overflow:auto;box-shadow:0 40px 80px -30px rgba(0,0,0,.9);border-top:2px solid var(--brand)}
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(6px);z-index:20;display:grid;place-items:center;padding:calc(16px + env(safe-area-inset-top,0px)) 16px calc(16px + env(safe-area-inset-bottom,0px))}
+body{padding-bottom:env(safe-area-inset-bottom,0px)}
+.native .side{padding-top:calc(10px + var(--sat,0px))}
+.native .modal-bg{padding-top:calc(16px + var(--sat,0px))}
+.modal{background:#161616;border:1px solid rgba(255,255,255,.1);border-radius:22px;padding:26px;width:min(680px,100%);max-height:90vh;max-height:calc(100dvh - 40px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - var(--sat,0px));overflow:auto;overscroll-behavior:contain;box-shadow:0 40px 80px -30px rgba(0,0,0,.9);border-top:2px solid var(--brand)}
 .undo{position:fixed;bottom:22px;right:50%;transform:translateX(50%);background:#1c1c1c;color:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 10px 8px 18px;display:flex;gap:14px;align-items:center;z-index:15;box-shadow:0 12px 30px -10px rgba(0,0,0,.8);font-size:14px;max-width:calc(100% - 24px)}
 .undo button{font:inherit;font-weight:800;background:var(--brand);border:0;color:#111;border-radius:999px;padding:6px 14px;cursor:pointer;white-space:nowrap}
 .fab{position:fixed;bottom:26px;left:26px;z-index:12;display:flex;align-items:center;gap:8px;font:inherit;font-weight:800;font-size:15px;background:var(--brand);color:#111;border:0;border-radius:999px;padding:14px 22px 14px 20px;cursor:pointer;box-shadow:0 14px 34px -10px rgba(255,212,0,.7)}
@@ -191,7 +194,7 @@ footer{margin-top:44px;border-top:1px solid var(--line);padding-top:22px}
   form.f{grid-template-columns:repeat(auto-fit,minmax(140px,1fr))}
   .donut-wrap{justify-content:center}
   .monthnav{width:100%;flex-wrap:wrap}.monthnav input{flex:1;min-width:0}.monthnav button{flex:none}
-  .side{position:sticky;top:0;z-index:5;height:auto;flex-direction:row;align-items:center;padding:10px 12px;border-inline-end:0;border-bottom:1px solid var(--line);gap:10px;background:rgba(10,10,10,.85)}
+  .side{position:sticky;top:0;z-index:5;height:auto;flex-direction:row;align-items:center;padding:calc(10px + env(safe-area-inset-top,0px)) calc(12px + env(safe-area-inset-right,0px)) 10px calc(12px + env(safe-area-inset-left,0px));border-inline-end:0;border-bottom:1px solid var(--line);gap:10px;background:rgba(10,10,10,.85)}
   .brand{padding:0}.brand div{display:none}.logo{width:36px;height:36px}
   .nav{flex-direction:row;overflow-x:auto;scrollbar-width:none;flex:1;min-width:0}
   .nav::-webkit-scrollbar{display:none}
@@ -205,7 +208,7 @@ footer{margin-top:44px;border-top:1px solid var(--line);padding-top:22px}
   td,th{padding:10px 7px}
   .health{grid-template-columns:1fr;gap:20px}
   .cc{transform:none}
-  .fab{bottom:16px;left:16px;padding:12px 18px}
+  .fab{bottom:calc(16px + env(safe-area-inset-bottom,0px));left:16px;padding:12px 18px}
 }
 
 /* ===== colourful, softer layer ===== */
@@ -573,7 +576,7 @@ function buildDoc(){
   var css=document.getElementById('app-style').textContent;
   var js=document.getElementById('app').textContent;
   var json=JSON.stringify(state).replace(/</g,'\\u003c');
-  return '<!DOCTYPE html>\n<html lang="he" dir="rtl">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1">\n<title>'+TITLE+'</title>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Rubik:wght@400;500;700;800;900&display=swap">\n<style id="app-style">'+css+'</style>\n</head>\n<body>\n<div id="root"></div>\n<script type="application/json" id="state">'+json+'<\/script>\n<script id="app">'+js+'<\/script>\n</body>\n</html>\n';
+  return '<!DOCTYPE html>\n<html lang="he" dir="rtl">\n<head>\n<meta charset="utf-8">\n<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n<title>'+TITLE+'</title>\n<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;600;700;800;900&family=Rubik:wght@400;500;700;800;900&display=swap">\n<style id="app-style">'+css+'</style>\n</head>\n<body>\n<div id="root"></div>\n<script type="application/json" id="state">'+json+'<\/script>\n<script id="app">'+js+'<\/script>\n</body>\n</html>\n';
 }
 function paintStatus(){
   var el=document.getElementById('status');if(!el)return;
@@ -1716,7 +1719,7 @@ function overdraftHTML(compact){
     '<div class="sub" style="color:'+col+'">'+(used?L('בשימוש ')+money(used)+(lim?' ('+pct(u)+')':''):L('לא בשימוש — אתה בפלוס'))+L(' · פנוי למשיכה כולל המסגרת: ')+money(Math.max(0,b.amount+lim))+'</div></div>';
 }
 /* ---------- suggestions to the developer (anonymous: text only, no financial data) ---------- */
-var APP_VERSION='2026.11.03.2124',APP_REPO='leonidkon123-sketch/kesef-app',fbStatus={},fbDb=null;
+var APP_VERSION='2026.11.04.0836',APP_REPO='leonidkon123-sketch/kesef-app',fbStatus={},fbDb=null;
 var FB_TYPES=[['idea','💡','רעיון לשיפור'],['bug','🐞','משהו לא עובד'],['question','❓','שאלה']];
 var FB_STATUS={sent:'נשלח',local:'שמור — יישלח כשיהיה חיבור',seen:'התקבל ונקרא',planned:'אושר — ייכנס לעדכון',done:'בוצע ✓',declined:'לא יבוצע'};
 function fbItemStatus(f){var r=fbStatus[f.id];return r&&r.status?r.status:(f.synced?'sent':'local');}
@@ -2286,7 +2289,7 @@ function autoBackups(){try{return JSON.parse(localStorage.getItem('kesef-backups
 function autoBackupsHTML(){var a=autoBackups();if(!a.length)return '';
   return '<div class="small" style="margin-top:10px"><b>'+L('גיבויים אוטומטיים במכשיר:')+'</b> '+a.slice().reverse().map(function(x,i){return '<button class="s" data-act="restorebk" data-i="'+(a.length-1-i)+'" style="margin:3px">'+esc(dLabel(String(x.at).slice(0,10)))+' '+String(x.at).slice(11,16)+(x.reason==='update'?' · '+L('לפני עדכון'):'')+'</button>';}).join('')+'</div>';}
 function footer(){
-  return '<div class="spread" style="margin-top:44px;border-top:1px solid var(--line);padding-top:18px"><h3 style="margin:0">Language · שפה · Язык</h3><div class="row">'+langSwitch()+'<button class="s" data-act="wizopen" style="margin-bottom:10px">'+L('הפרופיל שלי')+'</button></div></div>'+L('<footer><h3>גיבוי ונתונים</h3><div class="row">')+
+  return '<div class="spread" style="margin-top:44px;border-top:1px solid var(--line);padding-top:18px"><h3 style="margin:0">Language · שפה · Язык</h3><div class="row">'+langSwitch()+'<button class="s" data-act="wizopen" style="margin-bottom:10px">'+L('הפרופיל שלי')+'</button><button class="s" data-act="fbopen" style="margin-bottom:10px">💡 '+L('הצעה למפתח')+'</button></div></div>'+L('<footer><h3>גיבוי ונתונים</h3><div class="row">')+
   L('<button class="s" data-act="backup">הורד גיבוי (JSON)</button>')+
   L('<label class="s" style="flex-direction:row;cursor:pointer;color:var(--ink);border:1px solid var(--line);border-radius:8px;padding:5px 10px;background:transparent">טען גיבוי<input type="file" accept=".json,application/json" data-import style="display:none"></label>')+
   L('<button class="s" data-act="dlapp">הורד את התוכנה כקובץ HTML</button>')+
@@ -2571,7 +2574,7 @@ render();
 })();
 </script>
 <script id="pwa">(function(){
-  var APPV='2026.11.03.2124',PAGES='https://leonidkon123-sketch.github.io/kesef-app/',REPO='leonidkon123-sketch/kesef-app';
+  var APPV='2026.11.04.0836',PAGES='https://leonidkon123-sketch.github.io/kesef-app/',REPO='leonidkon123-sketch/kesef-app';
   var lang=(function(){try{return localStorage.getItem('kesef-lang')||'he';}catch(e){return 'he';}})();
   var T={he:{upd:'יש גרסה חדשה של התוכנה 🎉',now:'עדכן עכשיו',later:'אחר כך',apk:'עדכון חדש לאפליקציה זמין',dl:'להורדה',off:'אין אינטרנט — הכל עובד כרגיל, הנתונים נשמרים במכשיר'},
          en:{upd:'A new version of the app is ready 🎉',now:'Update now',later:'Later',apk:'A new app update is available',dl:'Download',off:'Offline — everything still works, data is saved on this device'},
@@ -2593,6 +2596,18 @@ render();
     b.appendChild(w);document.body.appendChild(b);
   }
   var isNative=!!(window.Capacitor&&window.Capacitor.isNativePlatform&&window.Capacitor.isNativePlatform());
+  if(isNative){
+    document.documentElement.classList.add('native');
+    var SB=window.Capacitor.Plugins&&window.Capacitor.Plugins.StatusBar;
+    if(SB){try{SB.setOverlaysWebView({overlay:false});SB.setBackgroundColor({color:'#111111'});SB.setStyle({style:'DARK'});}catch(e){}}
+    /* if the page is still drawn under the status bar, push the top bar down by the bar's height */
+    setTimeout(function(){try{
+      var probe=document.createElement('div');probe.style.cssText='position:fixed;top:0;height:env(safe-area-inset-top,0px);visibility:hidden';document.body.appendChild(probe);
+      var envTop=probe.getBoundingClientRect().height;probe.remove();
+      var sat=envTop>0?0:(window.innerHeight>=screen.height-4?36:0);
+      if(sat)document.documentElement.style.setProperty('--sat',sat+'px');
+    }catch(e){}},400);
+  }
   if(!isNative&&'serviceWorker' in navigator&&window.isSecureContext){
     window.addEventListener('load',function(){
       navigator.serviceWorker.register('sw.js').then(function(reg){
