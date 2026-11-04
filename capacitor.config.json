@@ -13,6 +13,9 @@
       "overlaysWebView": false,
       "backgroundColor": "#111111",
       "style": "DARK"
+    },
+    "LocalNotifications": {
+      "iconColor": "#FFD400"
     }
   }
 }
