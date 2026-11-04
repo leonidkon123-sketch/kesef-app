@@ -1,5 +1,5 @@
 /* הכסף שלי — offline support. The app shell is cached; market data is fetched fresh when online. */
-var CACHE='kesef-2026.11.04.1102';
+var CACHE='kesef-2026.11.04.1110';
 var SHELL=['./','index.html','manifest.webmanifest','icons/icon-192.png','icons/icon-512.png','icons/maskable-512.png','market.json','version.json'];
 self.addEventListener('install',function(e){e.waitUntil(caches.open(CACHE).then(function(c){return c.addAll(SHELL);}));});
 self.addEventListener('message',function(e){if(e.data==='skip')self.skipWaiting();});
