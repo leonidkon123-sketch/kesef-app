@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#111111"><title>הכסף שלי</title>
+<style>html,body{margin:0;height:100%;background:#0f1117}</style>
+<script>
+/* Starts the newest version of the app: a version downloaded automatically (if it is newer and started fine before), otherwise the one inside the APK. */
+(function(){
+  var NATIVE='2026.11.05.1025';window.KESEF_NATIVE=NATIVE;
+  var ls=window.localStorage,cv=null,html=null;
+  try{cv=ls.getItem('kesef-live-ver');html=ls.getItem('kesef-live-html');}catch(e){}
+  try{
+    if(cv&&ls.getItem('kesef-live-try')===cv&&ls.getItem('kesef-live-ok')!==cv)ls.setItem('kesef-live-bad',cv); /* last start of this version failed → don't use it */
+    var bad=ls.getItem('kesef-live-bad');
+    if(cv&&cv>NATIVE&&cv!==bad&&html&&html.indexOf('id="app"')>0){
+      ls.setItem('kesef-live-try',cv);
+      /* swap only after this small page finished loading (document.open is ignored while the page is still being read) */
+      setTimeout(function(){document.open();document.write(html);document.close();},0);return;
+    }
+  }catch(e){}
+  location.replace('app.html');
+})();
+</script></head><body></body></html>

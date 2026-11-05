@@ -2,7 +2,8 @@ name: Android app (APK)
 on:
   push:
     branches: [main]
-    paths: ['index.html', 'sw.js', 'manifest.webmanifest', 'icons/**', 'assets/**', 'capacitor.config.json', 'package.json', 'version.json', '.github/workflows/android.yml']
+    # A fresh APK is also published on every app change, as a fallback. Installed phones update themselves (live update) once GitHub Pages is on.
+    paths: ['index.html', 'loader.html', 'manifest.webmanifest', 'icons/**', 'assets/**', 'capacitor.config.json', 'package.json', '.github/workflows/android.yml']
   workflow_dispatch:
 permissions:
   contents: write
@@ -26,7 +27,9 @@ jobs:
       - name: Copy the web app
         run: |
           mkdir -p www
-          cp index.html sw.js manifest.webmanifest market.json version.json www/
+          cp sw.js manifest.webmanifest market.json version.json www/
+          cp index.html www/app.html
+          cp loader.html www/index.html
           cp -r icons www/
       - name: Create the Android project
         run: npx cap add android && npx cap sync android

@@ -1,6 +1,9 @@
 name: Web app (GitHub Pages)
-# Runs only when started by hand: GitHub Pages needs a public repository (or a paid plan).
+# Publishes the web app (and the file the phone app checks for updates). Skipped while the repository is private:
+# GitHub Pages on a free account needs a public repository.
 on:
+  push:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
@@ -11,6 +14,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   deploy:
+    if: ${{ !github.event.repository.private }}
     runs-on: ubuntu-latest
     environment:
       name: github-pages

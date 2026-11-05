@@ -1807,7 +1807,7 @@ function overdraftHTML(compact){
     '<div class="sub" style="color:'+col+'">'+(used?L('בשימוש ')+money(used)+(lim?' ('+pct(u)+')':''):L('לא בשימוש — אתה בפלוס'))+L(' · פנוי למשיכה כולל המסגרת: ')+money(Math.max(0,b.amount+lim))+'</div></div>';
 }
 /* ---------- suggestions to the developer (anonymous: text only, no financial data) ---------- */
-var APP_VERSION='2026.11.05.0959',APP_REPO='leonidkon123-sketch/kesef-app',fbStatus={},fbDb=null;
+var APP_VERSION='2026.11.05.1025',APP_REPO='leonidkon123-sketch/kesef-app',fbStatus={},fbDb=null;
 var FB_TYPES=[['idea','💡','רעיון לשיפור'],['bug','🐞','משהו לא עובד'],['question','❓','שאלה']];
 var FB_STATUS={sent:'נשלח',local:'שמור — יישלח כשיהיה חיבור',seen:'התקבל ונקרא',planned:'אושר — ייכנס לעדכון',done:'בוצע ✓',declined:'לא יבוצע'};
 function fbItemStatus(f){var r=fbStatus[f.id];return r&&r.status?r.status:(f.synced?'sent':'local');}
@@ -3100,11 +3100,11 @@ render();
 })();
 </script>
 <script id="pwa">(function(){
-  var APPV='2026.11.05.0959',PAGES='https://leonidkon123-sketch.github.io/kesef-app/',REPO='leonidkon123-sketch/kesef-app';
+  var APPV='2026.11.05.1025',PAGES='https://leonidkon123-sketch.github.io/kesef-app/',REPO='leonidkon123-sketch/kesef-app';
   var lang=(function(){try{return localStorage.getItem('kesef-lang')||'he';}catch(e){return 'he';}})();
-  var T={he:{upd:'יש גרסה חדשה של התוכנה 🎉',now:'עדכן עכשיו',later:'אחר כך',apk:'עדכון חדש לאפליקציה זמין',dl:'להורדה',off:'אין אינטרנט — הכל עובד כרגיל, הנתונים נשמרים במכשיר'},
-         en:{upd:'A new version of the app is ready 🎉',now:'Update now',later:'Later',apk:'A new app update is available',dl:'Download',off:'Offline — everything still works, data is saved on this device'},
-         ru:{upd:'Готова новая версия программы 🎉',now:'Обновить',later:'Позже',apk:'Доступно обновление приложения',dl:'Скачать',off:'Нет интернета — всё работает, данные сохраняются на устройстве'}}[lang]||null;
+  var T={he:{ready:'עדכון חדש הותקן ✓',upd:'יש גרסה חדשה של התוכנה 🎉',now:'עדכן עכשיו',later:'אחר כך',apk:'עדכון חדש לאפליקציה זמין',dl:'להורדה',off:'אין אינטרנט — הכל עובד כרגיל, הנתונים נשמרים במכשיר'},
+         en:{ready:'A new update was installed ✓',upd:'A new version of the app is ready 🎉',now:'Update now',later:'Later',apk:'A new app update is available',dl:'Download',off:'Offline — everything still works, data is saved on this device'},
+         ru:{ready:'Обновление установлено ✓',upd:'Готова новая версия программы 🎉',now:'Обновить',later:'Позже',apk:'Доступно обновление приложения',dl:'Скачать',off:'Нет интернета — всё работает, данные сохраняются на устройстве'}}[lang]||null;
   T=T||{};
   /* safety copies of the data: once a day and before every update (last 5 kept on the device) */
   function backup(reason){try{var cur=localStorage.getItem('kesef-state-v1');if(!cur)return;var arr=JSON.parse(localStorage.getItem('kesef-backups')||'[]');
@@ -3147,12 +3147,29 @@ render();
       var reloaded=false;navigator.serviceWorker.addEventListener('controllerchange',function(){if(reloaded)return;reloaded=true;location.reload();});
     });
   }
-  /* installed Android app (APK): compare with the latest published version */
-  if(isNative&&typeof fetch==='function'){
-    fetch(PAGES+'version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(j){
-      if(!j||!j.v||j.v<=APPV)return;var note=j['note_'+lang]||'';
-      bar(T.apk+(note?' — '+note:''),T.dl,function(){backup('update');window.open('https://github.com/'+REPO+'/releases/latest','_blank');});
-    }).catch(function(){});
+  /* installed Android app: updates itself in the background (no reinstall). New code is downloaded, kept on the phone,
+     and used from the next start. The data stays where it is. Only changes to the phone part (rare) need a new APK. */
+  if(isNative){
+    setTimeout(function(){try{var rt=document.getElementById('root');if(rt&&rt.children.length)localStorage.setItem('kesef-live-ok',APPV);}catch(e){}},2500);
+    var NATIVE=window.KESEF_NATIVE||APPV;
+    var checkLive=function(){
+      if(typeof fetch!=='function'||!navigator.onLine)return;
+      fetch(PAGES+'version.json?t='+Date.now(),{cache:'no-store'}).then(function(r){return r.ok?r.json():null;}).then(function(j){
+        if(!j||!j.v)return;
+        if(j.apkMin&&j.apkMin>NATIVE){bar(T.apk,T.dl,function(){backup('update');window.open('https://github.com/'+REPO+'/releases/latest','_blank');});return;}
+        var have=null;try{have=localStorage.getItem('kesef-live-ver');}catch(e){}
+        if(j.v<=APPV||j.v===have)return;
+        return fetch(PAGES+'index.html?v='+encodeURIComponent(j.v),{cache:'no-store'}).then(function(r){return r.ok?r.text():null;}).then(function(h){
+          if(!h||h.indexOf('id="app"')<0||h.indexOf("APP_VERSION='"+j.v+"'")<0)return;
+          backup('update');
+          try{localStorage.setItem('kesef-live-html',h);localStorage.setItem('kesef-live-ver',j.v);localStorage.removeItem('kesef-live-bad');}catch(e){return;}
+          var note=j['note_'+lang]||'';
+          bar((T.ready||'')+(note?' — '+note:''),T.now,function(){location.href='index.html';});
+        });
+      }).catch(function(){});
+    };
+    setTimeout(checkLive,4000);setInterval(checkLive,6*3600*1000);
+    document.addEventListener('visibilitychange',function(){if(!document.hidden)setTimeout(checkLive,1500);});
   }
   window.addEventListener('offline',function(){bar(T.off);setTimeout(function(){var b=document.getElementById('upd-bar');if(b&&b.textContent.indexOf(T.off)===0)b.remove();},5000);});
 })();
